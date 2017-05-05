@@ -3,7 +3,6 @@
 <meta charset="utf-8">
 
 <style>
-
 svg text {
  fill:red;
  font-size:40px;
@@ -25,7 +24,9 @@ var arcObj = d3.arc()
     .innerRadius(140)
     .outerRadius(160)
     .startAngle(0);
+	
 
+	
 // Get the SVG container, and apply a transform such that the origin is the
 // center of the canvas. This way, we don’t need to position arcs individually.
 var svg = d3.select("svg"),
@@ -35,8 +36,7 @@ var svg = d3.select("svg"),
 
 	//text anchor , middle centres text
 	var tx = g.append('text').text('60').attr("text-anchor","middle");
-	
-	 
+		 
 	
 // Add the background arc, from 0 to 100% (tau).
 var background = g.append("path")
@@ -44,6 +44,7 @@ var background = g.append("path")
     .style("fill", "#eee")
     .attr("d", arcObj);
 
+	
 // Add the foreground arc 60%
 var foreground =  g.append("path")
     .datum({endAngle: 0.60 * tau})
