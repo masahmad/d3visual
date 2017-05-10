@@ -24,15 +24,21 @@ function arc1 ()
 		
 		// transition fx
 		group.transition()
-		.delay(2000)
+		//.delay(1000)
 		.duration(3000)
 		.attr("transform", function(d,i) {return "translate(" +  ((i+1)*160) + ",200)" });
+		//.attr("transform", function(d,i) {return "translate(" +  ((i+1)*160) + ",200) rotate(" + i*60 +")" });
+		
+		group.transition()
+		.delay(4000)
+		.duration(6000)
+		//.attr("transform", function(d,i) {return "translate(" +  ((i+1)*160) + ",200)" });
+		.attr("transform", function(d,i) {return "translate(" +  ((i+1)*160) + ",200) rotate(" + -34 +")" });
 		
 		
 
 		console.log(group);
-    
-	
+    	
 	  var arc = d3.svg.arc()
         .innerRadius(radius - 20)
         .outerRadius(radius)
@@ -112,7 +118,7 @@ function arc2 ()
         .data(newObj)
 		.enter()
 		.append("g")
-		.attr("transform", function(d,i) {return "translate(" + ((i+1)*400) + ",200)" });
+		.attr("transform", function(d,i) {return "translate(" + ((i+1)*400) + ",200) rotate(300)" });
 		
 
 				
