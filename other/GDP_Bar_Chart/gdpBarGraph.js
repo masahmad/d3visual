@@ -82,8 +82,12 @@ d3.csv("gdp.csv", function(error,data) {
     .append('rect')
     .attr("height", 0)
     .attr("y", height)
-    .transition().duration(3000)
+    .transition()
+	//.ease(d3.easeLinear)
+	.duration(3000)
+	
     .delay( function(d,i) { return i * 200; })
+	
     // attributes can be also combined under one .attr
     .attr({
       "x": function(d) { return xScale(d.country); },

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Pie Charts</title>
+    
+        <!-- Stylesheet -->
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        
+        <!-- Load D3 -->
+        <script src="script/d3.v4.min.js" charset="utf-8"></script>
+        
+        <style>
+		
+		svg {background-color:#ddd; width:100%;height:100%;}
+		
+		</style>
+        
+        
+    </head>
+    <body>
+        <h2>Pie Chart and Donut Chart</h2>
+      
+        
+        <script>
+		
+		s =  {
+    transformX: 400,
+	transformY: 220,
+	pieRadius: 200,
+	innerPieRadius:150,
+	pieStyle:"default",
+	pieFX:"none",
+	label:"none",
+	opacity:1,
+    parentContainer: 'body'
+	
+  }
+		
+		
+			var t0 = Date.now();
+			 var radius      = s.pieRadius;
+			
+			 var canvas   = d3.select('body')
+            .append("svg")
+            .attr("width", 300)
+            .attr("height", 300);
+			
+
+        var group  = canvas.append("g")
+            .attr("transform", "translate(" + s.transformX + "," + s.transformY +")");
+
+        var arc  = d3.arc()
+            .innerRadius(s.innerPieRadius)
+            .outerRadius(radius);
+			
+			
+        var color       = d3.scaleOrdinal()
+		.range(['#E6E6FA','#D8BFD8','#DDA0DD','#DA70D6','#EE82EE','#FF00FF','#FF00FF','#BA55D3','#9932CC','#9400D3','#8A2BE2','#8B008B']);
+
+			
+	
+	d3.json("/d3/data/testdata.json", function (data)
+    {
+	
+	 
+		console.log(data);
+	
+
+        var pie  = d3.pie()
+            .value(function (d)
+            {
+                return d.performance;
+            });
+
+        var theArc  = group.selectAll(".arc")
+            .data(pie(data))
+            .enter()
+            .append("g")
+            .attr("class", "arc");
+
+        theArc.append("path")
+            .attr("d", arc)
+			.style("stroke", "#333")
+			.style("stroke-width", "1")
+			.style("opacity", s.opacity) 
+            .attr("fill", function (d)
+            {
+                return color(d.data.appname);
+            })
+			
+		.transition()
+      .ease(d3.easeElastic)
+      .duration(25000)
+      .attrTween("d", tweenDonut)
+			
+		//animate	
+		/*
+	  theArc.transition()
+      .ease(d3.easeLinear)
+      .duration(5000)
+      .attrTween("d", tweenDonut);
+	 */
+			
+			
+			/*
+        theArc.append("text")
+           .attr("transform", function (d) {
+                return "translate(" + arc.centroid(d) + ")";
+            })
+            .attr("dy", "0.15em")
+			.attr("font-size", "11px")
+			.attr("fill", "#444")
+            .text(function (d)
+            {
+                return d.data.appname;
+            });
+			*/
+			
+			
+			
+		
+	
+			
+			
+		 }); // end ajax	
+			
+	
+	 var tweenDonut = function (b) {
+	
+		//   function tweenDonut(b) {
+  b.innerRadius = 0;
+  var i = d3.interpolate({startAngle: 0, endAngle: 0}, b);
+  return function(t) { return arc(i(t)); };
+}
+		
+		
+		</script>
+		
+		
+		
+
+        
+    </body>
+    
+</html>
