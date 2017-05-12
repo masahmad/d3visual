@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Test Barchart</title>
+    
+        <!-- Stylesheet -->
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        
+        <!-- Load D3 -->
+        <!--<script src="script/d3.v4.min.js" charset="utf-8"></script> -->
+		<script src="script/d3.v3.min.js" charset="utf-8"></script>
+		
+		
+        
+        <style>
+		
+		svg {background-color:#dfd; width:100%;height:100%;}
+		
+		</style>
+        
+        
+    </head>
+    <body>
+        <h2>Bar Chart</h2>
+      
+        
+        <script>
+		
+		s =  {
+    transformX: 400,
+	transformY: 220,
+	pieRadius: 200,
+	innerPieRadius:150,
+	pieStyle:"default",
+	pieFX:"none",
+	label:"none",
+	opacity:1,
+    parentContainer: 'body',
+	jsonpath:"/vslearn/d3visual/other/GDP_Bar_Chart/gdp.csv"
+	
+  }
+		
+		
+			// See D3 margin convention: http://bl.ocks.org/mbostock/3019563
+var margin = {top: 20, right: 10, bottom: 100, left:50},
+    width = 700 - margin.right - margin.left,
+    height = 500 - margin.top - margin.bottom;			
+			
+			var canvas   = d3.select("body")
+			
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+			
+			 var group  = canvas.append("g")
+             .attr("transform","translate(" + margin.left + "," + margin.right + ")");
+
+
+
+	  
+	  
+	  
+	  
+      
+	  
+	  // define x and y scales
+var xScale = d3.scale.ordinal().rangeRoundBands([0,width], 0.2, 0.2);
+
+//v4
+//var xScale = d3.scaleBand().rangeRound([0, width]).padding(0.2,0.2);
+	
+//v4
+//var yScale = d3.scaleLinear().range([height, 0]);
+
+//v3
+var yScale = d3.scale.linear().range([height, 0]);
+
+	
+// define x axis and y axis
+var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+//version 4
+//var xAxis = d3.axisBottom().scale(xScale);//.orient("bottom");
+
+var yAxis = d3.svg.axis().scale(yScale).orient("left");
+
+// v4
+//var yAxis = d3.axisLeft().scale(yScale);	  
+			
+	    var color  = d3.scale.ordinal()
+	  //var color  = d3.scaleOrdinal()
+		.range(['#E6E6FA','#D8BFD8','#DDA0DD','#DA70D6','#EE82EE','#FF00FF','#FF00FF','#BA55D3','#9932CC','#9400D3','#8A2BE2','#8B008B']);
+		
+	
+	d3.csv(s.jsonpath, function (data)
+    {
+		console.log(s.jsonpath);
+		console.log(data);
+
+		
+     data.forEach(function(d) {
+    d.country = d.country;
+    d.gdp = +d.gdp;       // try removing the + and see what the console prints
+    console.log(d.gdp);   // use console.log to confirm
+  });
+
+		
+// sort the gdp values
+  data.sort(function(a,b) {
+    return b.gdp - a.gdp;
+  });
+  
+  
+		
+  // Specify the domains of the x and y scales
+  xScale.domain(data.map(function(d) { return d.country; }) );
+  yScale.domain([0, d3.max(data, function(d) { return d.gdp; } ) ]);
+	
+	
+  canvas.selectAll('rect')
+    .data(data)
+    .enter()
+    .append('rect')
+    .attr("height", 0)
+    .attr("y", height)
+    .transition()
+	//.ease(d3.easeLinear)
+	.duration(3000)
+	
+    .delay( function(d,i) { return i * 200; })
+	
+    // attributes can be also combined under one .attr
+    .attr({
+      "x": function(d) { return xScale(d.country); },
+      "y": function(d) { return yScale(d.gdp); },
+      //"width": xScale.bandwidth(),
+	     "width": xScale.rangeBand(),
+      "height": function(d) { return  height - yScale(d.gdp); }
+    })
+    .style("fill", function(d,i) { return 'rgb(255, 20, ' + ((i * 30) + 100) + ')'});
+
+	
+	
+	
+	
+	   canvas.selectAll('text')
+            .data(data)
+            .enter()
+            .append('text')
+            .text(function(d){
+                return d.gdp;
+            })
+            .attr({
+                "x": function(d){ return xScale(d.country) +  xScale.rangeBand()/2; },
+                "y": function(d){ return yScale(d.gdp)+ 12; },
+                "font-family": 'sans-serif',
+                "font-size": '13px',
+                "font-weight": 'bold',
+                "fill": 'white',
+                "text-anchor": 'middle'
+            });
+
+	
+	 // Draw xAxis and position the label
+    canvas.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .selectAll("text")
+        .attr("dx", "-.8em")
+        .attr("dy", ".25em")
+        .attr("transform", "rotate(-60)" )
+        .style("text-anchor", "end")
+        .attr("font-size", "10px");
+
+
+    // Draw yAxis and postion the label
+    canvas.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("x", -height/2)
+        .attr("dy", "-3em")
+        .style("text-anchor", "middle")
+        .text("Trillions of US Dollars ($)");
+
+	
+	
+	
+			
+			
+		 }); // end ajax	
+
+
+
+
+	 
+	 
+		
+		</script>
+		
+		
+		
+
+        
+    </body>
+    
+</html>

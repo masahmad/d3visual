@@ -83,7 +83,7 @@ d3.csv("gdp.csv", function(error,data) {
     .attr("height", 0)
     .attr("y", height)
     .transition()
-	//.ease(d3.easeLinear)
+	.ease(d3.easeElastic)
 	.duration(3000)
 	
     .delay( function(d,i) { return i * 200; })
@@ -95,7 +95,7 @@ d3.csv("gdp.csv", function(error,data) {
       "width": xScale.rangeBand(),
       "height": function(d) { return  height - yScale(d.gdp); }
     })
-    .style("fill", function(d,i) { return 'rgb(20, 20, ' + ((i * 30) + 100) + ')'});
+    .style("fill", function(d,i) { return 'rgb(200, 200, ' + ((i * 30) + 100) + ')'});
 
 
         svg.selectAll('text')
