@@ -9,7 +9,7 @@
 	"col": "blue"
   },
   {
-    "name": "SQL001",
+    "name": "SQL002",
     "appname": "SQL Server",
     "os": "Win 2012 Server",
     "performance": 90,
